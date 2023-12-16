@@ -1,129 +1,67 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { api } from '../context/UserContext';
 
-const UserSignUp = () => {
-    const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        emailAddress: "",
-        password: "",
-    });
-
+function UserSignUp() {
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const { actions } = useContext(userContext);
+    const firstName = useRef(null);
+    const lastName = useRef(null);
+    const emailAddress = useRef(null);
+    const password = useRef(null);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    const handleCancel = (e) => {
+        e.preventDefault();
+        navigate("./");
     };
 
-    const handleSignUp = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const user = {
+            firstName: firstName.current.value,
+            lastName: lastName.current.value,
+            emailAddress: emailAddress.current.value,
+            password: password.current.value,
+        };
 
-        // Your sign-up logic here
-        // You can use the formData to send a request to your API for user registration
-
-        // For example, you might use the fetch function:
-        // fetch("/api/users", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(formData),
-        // })
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //     // Handle successful sign-up
-        //     console.log("User signed up:", data);
-
-        //     // Navigate to the list of courses or another route
-        //     navigate("/courses");
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error signing up:", error);
-        //     // Handle sign-up error
-        //   });
-
-        // For this example, we'll simulate a successful sign-up and navigate to the list of courses
-        console.log("Simulating successful sign-up");
-        navigate("/courses");
+        try {
+            const res = await api('users', 'POST');
+            if (res.status === 201) {
+                console.log(`${user.firstName} is signed in`);
+                await actions.signIn(user);
+                navigate('./');
+            } else if (res.status === 400) {
+                const errorData = await res.json();
+                setErrors(errorData.errors);
+            } else {
+                throw new Error();
+            }
+        } catch (e) {
+            console.log(`Error: ${e}`);
+        }
     };
 
     return (
-        <div id="root">
-            <header>
-                <div className="wrap header--flex">
-                    <h1 className="header--logo">
-                        <Link to="/">Courses</Link>
-                    </h1>
-                    <nav>
-                        <ul className="header--signedout">
-                            <li>
-                                <Link to="/sign-up">Sign Up</Link>
-                            </li>
-                            <li>
-                                <Link to="/sign-in">Sign In</Link>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-            <main>
-                <div className="form--centered">
-                    <h2>Sign Up</h2>
-                    <form onSubmit={handleSignUp}>
-                        <label htmlFor="firstName">First Name</label>
-                        <input
-                            id="firstName"
-                            name="firstName"
-                            type="text"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                        />
-                        <label htmlFor="lastName">Last Name</label>
-                        <input
-                            id="lastName"
-                            name="lastName"
-                            type="text"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                        />
-                        <label htmlFor="emailAddress">Email Address</label>
-                        <input
-                            id="emailAddress"
-                            name="emailAddress"
-                            type="email"
-                            value={formData.emailAddress}
-                            onChange={handleChange}
-                        />
-                        <label htmlFor="password">Password</label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                        <button className="button" type="submit">
-                            Sign Up
-                        </button>
-                        <button
-                            className="button button-secondary"
-                            onClick={() => navigate("/courses")}
-                        >
-                            Cancel
-                        </button>
-                    </form>
-                    <p>
-                        Already have a user account? Click here to{" "}
-                        <Link to="/sign-in">sign in</Link>!
-                    </p>
-                </div>
-            </main>
+        <div className="form--centered">
+            <h2>Sign Up</h2>
+
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="firstName">First Name</label>
+                <input id="firstName" name="firstName" type="text" ref={firstName} />
+                <label htmlFor="lastName">Last Name</label>
+                <input id="lastName" name="lastName" type="text" ref={lastName} />
+                <label htmlFor="emailAddress">Email Address</label>
+                <input id="emailAddress" name="emailAddress" type="email" ref={emailAddress} />
+                <label htmlFor="password">Password</label>
+                <input id="password" name="password" type="password" ref={password} />
+                <button className="button" type="submit">Sign Up</button>
+                <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
+            </form>
+            <br />
+            <p>Already have a user account? Click here to <Link to="/signin">sign in</Link>!</p>
         </div>
     );
-};
+}
 
 export default UserSignUp;

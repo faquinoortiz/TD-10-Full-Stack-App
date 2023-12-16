@@ -1,31 +1,38 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import AuthUserContext from "../path/to/AuthUserContext"; // Update the path accordingly
+import { UserContext } from '../context/UserContext';
+import { api } from '../context/UserContext'; 
 
 function CourseDetail() {
   const [course, setCourse] = useState({});
+  const [isLoaded, setisLoaded] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const authUser = useContext(AuthUserContext); // Assuming authUser is the context
+  const authUser = useContext(UserContext); 
 
-  // Fetch the details of the specific course
+  // Fetch specific course
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/courses/${id}`, {
-          method: 'GET',
-        });
+        const response = await api(`/courses/${id}`, 'GET');
 
         if (response.status === 200) {
-          setCourse(await response.json());
-        } else if (response.status === 400) {
-          navigate('/notfound');
+          const json = await response.json();
+          setCourse(json);
+          setisLoaded(true);
+        } else if (response.status === 404) {
+          
+          console.log("Course not found");
+          navigate("/notfound");
         } else {
-          navigate('/error');
+          
+          throw new Error();
         }
       } catch (error) {
-        console.log(error);
+        
+        console.error("Error fetching course:", error);
+        navigate("/error");
       }
     };
 
@@ -34,42 +41,37 @@ function CourseDetail() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/courses/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': 'Bearer ' + authUser.getToken(), // Adjust accordingly
-        },
-      });
+      const response = await api(`/courses/${id}`, 'DELETE', null, authUser);
 
       if (response.status === 204) {
         console.log('Course has been deleted');
         navigate('/');
       } else if (response.status === 403) {
-        navigate('/forbidden');
-      } else if (response.status === 500) {
+        throw new Error('/forbidden');
+      } else if (response.status === 400) {
         navigate('/error');
       } else {
-        throw Error();
+        throw new Error();
       }
     } catch (error) {
-      console.log(error);
+      console.log("There was an error deleting the course", error);
     }
   };
 
   return (
-   
-      <main>
-        <div className="actions--bar">
-          <div className="wrap">
-            <Link className="button" to={`/courses/${id}/update`}>
-              Update Course
-            </Link>
-            <button className="button" onClick={handleDelete}>
-              Delete Course
-            </button>
-          </div>
+    <>
+      <div className="actions--bar">
+        <div className="wrap">
+          {authUser && authUser.id === course.userId ? (
+            <>
+              <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
+              <button className="button" onClick={handleDelete}>Delete Course</button>
+            </>
+          ) : null}
+          <Link className="button button-secondary" to="/">Return to List</Link>
         </div>
-  
+      </div>
+      {isLoaded && (
         <div className="wrap">
           <h2>Course Detail</h2>
           <form>
@@ -78,23 +80,22 @@ function CourseDetail() {
                 <h3 className="course--detail--title">Course</h3>
                 <h4 className="course--name">{course.title}</h4>
                 <p>By {course.firstName} {course.lastName}</p>
-            
+                <ReactMarkdown children={course.description} />
               </div>
               <div>
                 <h3 className="course--detail--title">Estimated Time</h3>
                 <p>{course.estimatedTime}</p>
-  
                 <h3 className="course--detail--title">Materials Needed</h3>
                 <ul className="course--detail--list">
-                
+                  <ReactMarkdown children={course.materialsNeeded} />
                 </ul>
               </div>
             </div>
           </form>
         </div>
-      </main>
-    );
-  }
-  
+      )}
+    </>
+  );
+}
 
 export default CourseDetail;

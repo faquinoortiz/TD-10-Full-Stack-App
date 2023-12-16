@@ -1,76 +1,77 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
 
-const UserSignIn = () => {
-    const [formData, setFormData] = useState({
-        emailAddress: "",
-        password: "",
-    });
+function UserSignIn() {
+const {actions} = useContext(useContext);
+  const [errors, setErrors] = useState([]);
+  const emailAddress = useRef(null);
+  const password = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const passwordRef = useRef(null); // Ref for password input
-    const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    let from = "/";
+    if (location.state) {
+      from = location.state.from;
+    }
+
+    const credentials = {
+      emailAddress: emailAddress.current.value,
+      password: password.current.value,
     };
 
-    const handleSignIn = async (e) => {
-        e.preventDefault();
+    try {
+      const user = await actions.signIn(credentials);
+      if (user) {
+        navigate(from);
+      } else {
+        setErrors(["Sign-in was unsuccessful"]);
+      }
+    } catch (e) {
+      console.log(`Error: ${e}`);
+    }
+  };
 
-        
-        passwordRef.current.disabled = true;
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate("/");
+  };
 
-        try {
-            
-            console.log("Simulating successful sign-in");
-
-    // Redirect to the list of courses or another route
-            navigate("/courses");
-        } catch (error) {
-            console.error("Error signing in:", error);
-            
-        } finally {
-    
-            passwordRef.current.disabled = false;
-        }
-    };
-
-    return (
-        <div>
-            <h2>Sign In</h2>
-            <form onSubmit={handleSignIn}>
-                <label htmlFor="emailAddress">Email Address</label>
-                <input
-                    type="email"
-                    id="emailAddress"
-                    name="emailAddress"
-                    value={formData.emailAddress}
-                    onChange={handleChange}
-                    required
-                />
-
-                <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    ref={passwordRef}
-                    required
-                />
-
-                <button type="submit">Sign In</button>
-                <button type="button" onClick={() => navigate("/courses")}>
-                    Cancel
-                </button>
-            </form>
+  return (
+    <div className="form--centered">
+      <h2>Sign In</h2>
+      {errors.length ? (
+        <div className="validation--errors">
+          <h3>Validation Errors</h3>
+          <ul>
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
         </div>
-    );
-};
+      ) : null}
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="emailAddress">Email Address</label>
+        <input id="emailAddress" name="emailAddress" type="email" ref={emailAddress} />
+
+        <label htmlFor="password">Password</label>
+        <input id="password" name="password" type="password" ref={password} />
+
+        <button className="button" type="submit">
+          Sign In
+        </button>
+        <button className="button button-secondary" onClick={handleCancel}>
+          Cancel
+        </button>
+      </form>
+      <p>
+        Don't have a user account? Click here to <Link to="/signup">sign up</Link>!
+      </p>
+    </div>
+  );
+}
 
 export default UserSignIn;

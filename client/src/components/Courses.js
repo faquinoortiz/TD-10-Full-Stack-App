@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -14,6 +16,7 @@ const Courses = () => {
   }, []);
 
   return (
+    
     <div className="wrap main--grid">
       {courses.map((course) => (
         <Link
