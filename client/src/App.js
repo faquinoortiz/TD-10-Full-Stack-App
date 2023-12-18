@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Courses from './Courses';
+import Courses from '.components/Courses';
 import CreateCourse from '.components/CreateCourse';
 import UpdateCourse from '.components/UpdateCourse';
 import CourseDetail from '.components/CourseDetail';
