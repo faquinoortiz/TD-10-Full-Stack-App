@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Courses from './Courses';
-import CreateCourse from './CreateCourse';
-import UpdateCourse from './UpdateCourse';
-import CourseDetail from './CourseDetail';
-import UserSignIn from './UserSignIn';
-import UserSignUp from './UserSignUp';
-import UserSignOut from './UserSignOut';
-import Header from './Header'; 
+import CreateCourse from '.components/CreateCourse';
+import UpdateCourse from '.components/UpdateCourse';
+import CourseDetail from '.components/CourseDetail';
+import UserSignIn from '.components/UserSignIn';
+import UserSignUp from '.components/UserSignUp';
+import UserSignOut from '.components/UserSignOut';
+import Header from '.components/Header'; 
 
 const App = () => {
   return (
