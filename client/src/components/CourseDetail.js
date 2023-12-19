@@ -5,7 +5,7 @@ import UserContext from "../context/UserContext";
 import { api } from "../utils/apiHelper";
 
 function CourseDetail() {
-  const [course, setCourse] = useState({});
+  const [courses, setCourses] = useState({});
   const [isLoaded, setisLoaded] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,13 +13,13 @@ function CourseDetail() {
 
   // Fetch specific course
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchCourses = async () => {
       try {
         const response = await api(`/courses/${id}`, 'GET');
 
         if (response.status === 200) {
           const json = await response.json();
-          setCourse(json);
+          setCourses(json);
           setisLoaded(true);
         } else if (response.status === 404) {
           
@@ -36,7 +36,7 @@ function CourseDetail() {
       }
     };
 
-    fetchCourse();
+    fetchCourses();
   }, [id, navigate]);
 
   const handleDelete = async () => {
@@ -62,7 +62,7 @@ function CourseDetail() {
     <>
       <div className="actions--bar">
         <div className="wrap">
-          {authUser && authUser.id === course.userId ? (
+          {authUser && authUser.id === courses.userId ? (
             <>
               <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
               <button className="button" onClick={handleDelete}>Delete Course</button>
@@ -78,16 +78,16 @@ function CourseDetail() {
             <div className="main--flex">
               <div>
                 <h3 className="course--detail--title">Course</h3>
-                <h4 className="course--name">{course.title}</h4>
-                <p>By {course.firstName} {course.lastName}</p>
-                <ReactMarkdown children={course.description} />
+                <h4 className="course--name">{courses.title}</h4>
+                <p>By {courses.firstName} {courses.lastName}</p>
+                <ReactMarkdown children={courses.description} />
               </div>
               <div>
                 <h3 className="course--detail--title">Estimated Time</h3>
-                <p>{course.estimatedTime}</p>
+                <p>{courses.estimatedTime}</p>
                 <h3 className="course--detail--title">Materials Needed</h3>
                 <ul className="course--detail--list">
-                  <ReactMarkdown children={course.materialsNeeded} />
+                  <ReactMarkdown children={courses.materialsNeeded} />
                 </ul>
               </div>
             </div>
