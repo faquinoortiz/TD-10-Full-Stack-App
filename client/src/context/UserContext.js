@@ -1,24 +1,46 @@
 import React, { createContext, useState } from "react";
+import Cookies from "js-cookie";
+import { api } from "../utils/apiHelper";
 
 const UserContext = createContext(null);
 
 export const UserProvider = (props) => {
-  const [user, setUser] = useState(null);
+  const [authUser, setAuthUser] = useState(() => {
+    const cookie = Cookies.get('authenticatedUser');
+    return cookie ? JSON.parse(cookie) : null;
+  });
 
-  const signInUser = (username, password) => {
-    const newUser = {
-      username,
-      password,
-    };
-    setUser(newUser);
+  const signIn = async (credentials) => {
+    try {
+      const response = await api("/users", 'GET', null, credentials);
+
+      if (response.status === 200) {
+        const user = await response.json();
+        user.password = credentials.password;
+
+        setAuthUser(user);
+
+        Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 1 });
+        console.log(`${user.emailAddress} is now successfully signed in`);
+        return user;
+      } else if (response.status === 401) {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("Unexpected error");
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+      return null;
+    }
   };
 
-  const signOutUser = () => {
-    setUser(null);
+  const signOut = () => {
+    setAuthUser(null);
+    Cookies.remove("authenticatedUser");
   };
 
   return (
-    <UserContext.Provider value={{ user, actions: { signIn: signInUser, signOut: signOutUser } }}>
+    <UserContext.Provider value={{ authUser, actions: { signIn, signOut } }}>
       {props.children}
     </UserContext.Provider>
   );

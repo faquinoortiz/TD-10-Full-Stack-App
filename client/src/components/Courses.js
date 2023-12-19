@@ -1,19 +1,32 @@
 
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
+import { useNavigate,Link } from "react-router-dom";
+import { api } from "../utils/apiHelper";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the list of courses from the API
-    fetch("/api/courses")
-      .then((response) => response.json())
-      .then((data) => setCourses(data))
-      .catch((error) => console.error("Error fetching courses:", error));
-  }, []);
+    const fetchCourses = async () => {
+      try {
+        const response = await api("/courses", "GET");
+
+        if (response.status === 200) {
+          const json = await response.json();
+          setCourses(json);
+        } else if (response.status === 400) {
+          console.error("Error fetching courses:", response.statusText);
+          navigate("/errors");
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        navigate("/errors");
+      }
+    };
+
+    fetchCourses();
+  }, [navigate]);
 
   return (
     

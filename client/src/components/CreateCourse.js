@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
-import { api } from '../context/UserContext'; 
+import { api } from "../utils/apiHelper";
 
 const CreateCourse = () => {
     const { authUser } = useContext(UserContext);
@@ -37,13 +37,11 @@ const CreateCourse = () => {
                 navigate('/');
             } else if (response.status === 400) {
                 const data = await response.json();
-                if (data.errors) {
-                    console.log(data.errors);
-                    setErrors(data.errors);
-                }
+                console.log(data.errors);
+                setErrors(data.errors);
             }
-        } catch (error) {
-            console.log(`Error: ${error}`);
+        } catch (e) {
+            console.log(`Error: ${e}`);
         }
     };
 
@@ -69,18 +67,25 @@ const CreateCourse = () => {
                             <div>
                                 <label htmlFor="courseTitle">Course Title</label>
                                 <input id="courseTitle" name="courseTitle" type="text" ref={title} required />
-
                                 <label htmlFor="courseDescription">Course Description</label>
                                 <textarea id="courseDescription" name="courseDescription" ref={description} required />
                             </div>
                             <div>
                                 <label htmlFor="estimatedTime">Estimated Time</label>
                                 <input id="estimatedTime" name="estimatedTime" type="text" ref={estimatedTime} />
-
                                 <label htmlFor="materialsNeeded">Materials Needed</label>
                                 <textarea id="materialsNeeded" name="materialsNeeded" ref={materialsNeeded} />
                             </div>
                         </div>
+                        {errors.length > 0 && (
+                            <div className="errors">
+                                <ul>
+                                    {errors.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                         <button className="button" type="submit">
                             Create Course
                         </button>

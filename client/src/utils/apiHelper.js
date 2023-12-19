@@ -1,14 +1,16 @@
 export const api = (
    path,
-   method = "GET"
-   body = null
+   method = "GET",
+   body = null,
+   credentials
+
   
   ) => {
    const url = "http://localhost:5000/api{path}";
   
    const options ={
       method,
-      headers:{}
+      headers:{},
   
    };
   
@@ -16,8 +18,8 @@ export const api = (
       options.body =JSON.stringify(body);
       options.headers["Content-Type"] = "application/json; charset=utf-8"
    }
-  if (Credential){
-    const encodedCredential = btoa (`${credentials.emailAddress}:${credentials.password}`)
+  if (credentials){
+    const encodedCredentials = btoa (`${credentials.emailAddress}:${credentials.password}`)
     options.headers.Authorization = `Basic ${encodedCredentials}`  
   }
   

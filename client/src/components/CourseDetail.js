@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { UserContext } from '../context/UserContext';
-import { api } from '../context/UserContext'; 
+import UserContext from "../context/UserContext";
+import { api } from "../utils/apiHelper";
 
 function CourseDetail() {
   const [course, setCourse] = useState({});

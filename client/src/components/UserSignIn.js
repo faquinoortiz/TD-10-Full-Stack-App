@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 
 function UserSignIn() {
-const {actions} = useContext(useContext);
+const {actions} = useContext(UserContext);
   const [errors, setErrors] = useState([]);
-  const emailAddress = useRef(null);
-  const password = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const emailAddress = useRef(null);
+  const password = useRef(null);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,8 +49,8 @@ const {actions} = useContext(useContext);
         <div className="validation--errors">
           <h3>Validation Errors</h3>
           <ul>
-            {errors.map((error, index) => (
-              <li key={index}>{error}</li>
+            {errors.map((error) => (
+              <li> {error}</li>
             ))}
           </ul>
         </div>

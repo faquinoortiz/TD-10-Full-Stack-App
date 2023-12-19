@@ -1,15 +1,19 @@
 import React, { useContext, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api } from '../context/UserContext';
+import UserContext from "../context/UserContext";
+import { api } from "../utils/apiHelper";
+
 
 function UserSignUp() {
-    const [errors, setErrors] = useState({});
+    
+    const { actions } = useContext(UserContext);
     const navigate = useNavigate();
-    const { actions } = useContext(userContext);
+    
     const firstName = useRef(null);
     const lastName = useRef(null);
     const emailAddress = useRef(null);
     const password = useRef(null);
+    const [errors, setErrors] = useState({});
 
     const handleCancel = (e) => {
         e.preventDefault();
@@ -26,13 +30,13 @@ function UserSignUp() {
         };
 
         try {
-            const res = await api('users', 'POST');
-            if (res.status === 201) {
+            const response = await api('/users', 'POST',user);
+            if (response.status === 201) {
                 console.log(`${user.firstName} is signed in`);
                 await actions.signIn(user);
                 navigate('./');
-            } else if (res.status === 400) {
-                const errorData = await res.json();
+            } else if (response.status === 400) {
+                const errorData = await response.json();
                 setErrors(errorData.errors);
             } else {
                 throw new Error();
@@ -44,8 +48,18 @@ function UserSignUp() {
 
     return (
         <div className="form--centered">
-            <h2>Sign Up</h2>
-
+        <h2>Sign Up</h2>
+        {errors.length ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
+              {errors.map((error) => (
+                <li> {error}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+            
             <form onSubmit={handleSubmit}>
                 <label htmlFor="firstName">First Name</label>
                 <input id="firstName" name="firstName" type="text" ref={firstName} />
