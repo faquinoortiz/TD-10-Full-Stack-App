@@ -2,11 +2,11 @@ export const api = (
    path,
    method = "GET",
    body = null,
-   credentials
+   credentials =null
 
   
   ) => {
-   const url = "http://localhost:5000/api{path}";
+   const url = `http://localhost:5000/api${path}`;
   
    const options ={
       method,
@@ -15,7 +15,7 @@ export const api = (
    };
   
    if (body){
-      options.body =JSON.stringify(body);
+      options.body = JSON.stringify(body);
       options.headers["Content-Type"] = "application/json; charset=utf-8"
    }
   if (credentials){

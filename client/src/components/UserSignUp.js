@@ -15,13 +15,10 @@ function UserSignUp() {
     const password = useRef(null);
     const [errors, setErrors] = useState({});
 
-    const handleCancel = (e) => {
-        e.preventDefault();
-        navigate("./");
-    };
-
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         const user = {
             firstName: firstName.current.value,
             lastName: lastName.current.value,
@@ -33,8 +30,9 @@ function UserSignUp() {
             const response = await api('/users', 'POST',user);
             if (response.status === 201) {
                 console.log(`${user.firstName} is signed in`);
+        
                 await actions.signIn(user);
-                navigate('./');
+                navigate('/');
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 setErrors(errorData.errors);
@@ -44,6 +42,10 @@ function UserSignUp() {
         } catch (e) {
             console.log(`Error: ${e}`);
         }
+    };
+    const handleCancel = (e) => {
+        e.preventDefault();
+        navigate('/');
     };
 
     return (
