@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext"; 
+
 const Header = () => {
     const { authUser } = useContext(UserContext);
 
@@ -14,7 +15,7 @@ const Header = () => {
                     <ul className="header--signedout">
                         {authUser ? (
                             <>
-                                <li>{authUser.name}</li>
+                                <li> Welcome {authUser.firstName}</li>
                                 <li>
                                     <Link to="/signout">Sign Out</Link>
                                 </li>
