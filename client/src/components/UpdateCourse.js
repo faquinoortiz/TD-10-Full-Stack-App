@@ -61,8 +61,8 @@ const UpdateCourse = () => {
     };
 
     try {
-      const response = await api(`/courses/${id}`, {
-        method: 'PUT',
+      const response = await api(`/courses/${id}`, "PUT",{
+      
         headers: {
           'Content-Type': 'application/json',
         },
