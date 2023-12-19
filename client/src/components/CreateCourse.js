@@ -77,15 +77,16 @@ const CreateCourse = () => {
                                 <textarea id="materialsNeeded" name="materialsNeeded" ref={materialsNeeded} />
                             </div>
                         </div>
-                        {errors.length > 0 && (
-                            <div className="errors">
-                                <ul>
-                                    {errors.map((error, index) => (
-                                        <li key={index}>{error}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                        {errors.length ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
+              {errors.map((error) => (
+                <li> {error}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
                         <button className="button" type="submit">
                             Create Course
                         </button>
