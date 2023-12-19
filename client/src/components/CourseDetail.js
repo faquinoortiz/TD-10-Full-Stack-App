@@ -9,7 +9,7 @@ function CourseDetail() {
   const [isLoaded, setisLoaded] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const authUser = useContext(UserContext); 
+  const {authUser} = useContext(UserContext); 
 
   // Fetch specific course
   useEffect(() => {
