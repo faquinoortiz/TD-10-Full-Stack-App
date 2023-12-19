@@ -13,7 +13,7 @@ function UserSignUp() {
     const lastName = useRef(null);
     const emailAddress = useRef(null);
     const password = useRef(null);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState([]);
 
    
     const handleSubmit = async (e) => {
