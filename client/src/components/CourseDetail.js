@@ -79,8 +79,8 @@ function CourseDetail() {
               <div>
                 <h3 className="course--detail--title">Course</h3>
                 <h4 className="course--name">{courses.title}</h4>
-                <p>By {courses.firstName} {courses.lastName}</p>
-                <ReactMarkdown children={courses.description} />
+                <p>By {courses.firstName} {courses.user.lastName}</p>
+                <ReactMarkdown children={courses.user.description} />
               </div>
               <div>
                 <h3 className="course--detail--title">Estimated Time</h3>
