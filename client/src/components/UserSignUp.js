@@ -28,14 +28,14 @@ function UserSignUp() {
         };
 
         try {
-            const response = await api('/users', 'POST',user);
+            const response = await api('/users', 'POST', user);
             if (response.status === 201) {
                 console.log(`${user.firstName} is signed in`);
                 await actions.signIn(user);
                 navigate('/');
             } else if (response.status === 400) {
-                const errorData = await response.json()
-                setErrors(errorData.errors || []);
+                const errorData = await response.json();
+                setErrors(errorData.errors)
             } else {
                 throw new Error();
             }
