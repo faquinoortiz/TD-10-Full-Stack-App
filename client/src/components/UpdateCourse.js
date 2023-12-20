@@ -11,7 +11,7 @@ const UpdateCourse = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { authUser } = useContext(UserContext);
-
+//Ref of fields that are to be utilized in 
   const title = useRef(null);
   const description = useRef(null);
   const estimatedTime = useRef(null);
@@ -59,7 +59,7 @@ const UpdateCourse = () => {
       materialsNeeded: materialsNeeded.current.value,
       userId: authUser.id,
     };
-
+//Validation errors displaying on screen based on API(backend), i.e..if field is empty it will display a message for user
    try {
     const response = await api(`/courses/${id}`, "PUT", body, authUser);
    

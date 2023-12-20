@@ -4,7 +4,7 @@ import UserContext from "../context/UserContext";
 
 const Header = () => {
     const { authUser } = useContext(UserContext);
-
+//Links on header in page to Sign In or Sign Up as well as Sign Out
     return (
         <header>
             <div className="wrap header--flex">

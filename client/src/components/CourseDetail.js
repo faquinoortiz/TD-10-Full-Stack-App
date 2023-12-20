@@ -1,3 +1,4 @@
+//All of my imports for the CourseDetail file
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
@@ -11,7 +12,7 @@ function CourseDetail() {
   const navigate = useNavigate();
   const {authUser} = useContext(UserContext); 
 
-  // Fetch specific course
+  // Fetch specific course, if course is not found it will give an error
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -38,6 +39,8 @@ function CourseDetail() {
 
     fetchCourses();
   }, [id, navigate]);
+
+  //handles the Deletion of a course
 
   const handleDelete = async () => {
     try {

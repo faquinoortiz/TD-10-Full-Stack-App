@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import { api } from "../utils/apiHelper";
 
-
+// Information for User to be able to sign up
 function UserSignUp() {
     
     const { actions } = useContext(UserContext);
@@ -26,23 +26,26 @@ function UserSignUp() {
             emailAddress: emailAddress.current.value,
             password: password.current.value,
         };
-
+//Sets the validation errors from API, the user is only able to submit if all field required are filled
         try {
-            const response = await api('/users', 'POST', user);
-            if (response.status === 201) {
-                console.log(`${user.firstName} is signed in`);
-                await actions.signIn(user);
-                navigate('/');
-            } else if (response.status === 400) {
-                const errorData = await response.json();
-                setErrors(errorData.errors)
+            const res = await api('/users', 'POST', user)
+            if (res.status === 201){
+                await actions.signIn(user)
+                navigate('/')
+            } else if (res.status === 400) {
+                const errorData = await res.json()
+                setErrors(errorData.errors.errors)
+                console.log(errorData)
             } else {
-                throw new Error();
+                throw new Error()
             }
-        } catch (e) {
-            console.log(`Error: ${e}`);
-        }
+            } catch (error) {
+                console.log(`Errors: ${error}`)
+            }
+         
     };
+
+    //Will navigate back to the list of course if "Cancel" buttpon is selected
     const handleCancel = (e) => {
         e.preventDefault();
         navigate('/');

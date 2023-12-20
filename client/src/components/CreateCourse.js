@@ -16,7 +16,7 @@ const CreateCourse = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+//Logic for creating a course (i.e. the fields that are to be filled in )
         const course = {
             title: title.current.value,
             description: description.current.value,
@@ -40,7 +40,7 @@ const CreateCourse = () => {
             console.log(`Error: ${e}`);
         }
     };
-       
+//Navigates to course list if cancel button is selected
     const handleCancel = (e) => {
         e.preventDefault();
         navigate('/');
@@ -88,5 +88,5 @@ const CreateCourse = () => {
           </div>
         );
         }
-        
+
 export default CreateCourse;
