@@ -35,11 +35,11 @@ function UserSignUp() {
                 navigate('/');
             } else if (response.status === 400) {
                 const errorData = await response.json()
-                setErrors(errorData.errors);
+                setErrors(errorData.errors || []);
             } else {
                 throw new Error();
             }
-        } catch (error) {
+        } catch (e) {
             console.log(`Error: ${e}`);
         }
     };

@@ -40,6 +40,7 @@ const CreateCourse = () => {
             console.log(`Error: ${e}`);
         }
     };
+       
     const handleCancel = (e) => {
         e.preventDefault();
         navigate('/');
@@ -47,47 +48,45 @@ const CreateCourse = () => {
 
     console.log(authUser)
         
-        return (
-              <div className="wrap">
-                <h2>Create Course</h2>
-                {errors.length ? 
-                  <div className="validation--errors">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                      {errors.map((error) => 
-                        <li>{error}</li>)} 
-                    </ul>
-                  </div>
-                 : null
-            }
-            
-                <form onSubmit={handleSubmit}>
-                  <div className="main--flex">
-                    <div>
-                      <label htmlFor="courseTitle">Course Title</label>
-                      <input id="courseTitle" name="courseTitle" type="text" ref={title} required />
-                        
-                        <p> By {authUser.firstName}{authUser.lastName}</p>
-
-                      <label htmlFor="courseDescription">Course Description</label>
-                      <textarea id="courseDescription" name="courseDescription" ref={description} required />
-                    </div>
-                    <div>
-                      <label htmlFor="estimatedTime">Estimated Time</label>
-                      <input id="estimatedTime" name="estimatedTime" type="text" ref={estimatedTime} />
-                      <label htmlFor="materialsNeeded">Materials Needed</label>
-                      <textarea id="materialsNeeded" name="materialsNeeded" ref={materialsNeeded} />
-                    </div>
-                  </div>
-            
-                  <button className="button" type="submit">
-                    Create Course
-                  </button>
-                  <button className="button button-secondary" onClick={handleCancel}>
-                    Cancel
-                  </button>
-                </form>
-              </div>
-            );
+    return (
+          <div className="wrap">
+            <h2>Create Course</h2>
+            {errors.length ? (
+              <div className="validation--errors">
+                <h3>Validation Errors</h3>
+                <ul>
+                  {errors.map((error) => (
+                    <li>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+        
+            <form onSubmit={handleSubmit}>
+              <div className="main--flex">
+                <div>
+                  <label htmlFor="courseTitle">Course Title</label>
+                  <input id="courseTitle" name="courseTitle" type="text" ref={title} />
+                  <p>By {authUser.firstName} {authUser.lastName}</p>
+        
+                  <label htmlFor="courseDescription">Course Description</label>
+                  <textarea id="courseDescription" name="courseDescription" ref={description} />
+                </div>
+                <div>
+                  <label htmlFor="estimatedTime">Estimated Time</label>
+                  <input id="estimatedTime" name="estimatedTime" type="text" ref={estimatedTime} />
+                  <label htmlFor="materialsNeeded">Materials Needed</label>
+                  <textarea id="materialsNeeded" name="materialsNeeded" ref={materialsNeeded} />
+                </div>
+              </div>
+        
+              <button className="button" type="submit">Create Course</button>
+              <button className="button button-secondary" onClick={handleCancel}>
+                Cancel
+              </button>
+            </form>
+          </div>
+        );
         }
+        
 export default CreateCourse;
