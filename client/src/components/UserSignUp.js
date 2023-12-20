@@ -19,6 +19,7 @@ function UserSignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        
         const user = {
             firstName: firstName.current.value,
             lastName: lastName.current.value,
@@ -30,16 +31,15 @@ function UserSignUp() {
             const response = await api('/users', 'POST',user);
             if (response.status === 201) {
                 console.log(`${user.firstName} is signed in`);
-        
                 await actions.signIn(user);
                 navigate('/');
             } else if (response.status === 400) {
-                const errorData = await response.json();
+                const errorData = await response.json()
                 setErrors(errorData.errors);
             } else {
                 throw new Error();
             }
-        } catch (e) {
+        } catch (error) {
             console.log(`Error: ${e}`);
         }
     };
@@ -51,7 +51,7 @@ function UserSignUp() {
     return (
         <div className="form--centered">
         <h2>Sign Up</h2>
-        {errors.length ? (
+        {errors.length ? 
           <div className="validation--errors">
             <h3>Validation Errors</h3>
             <ul>
@@ -60,7 +60,7 @@ function UserSignUp() {
               ))}
             </ul>
           </div>
-        ) : null}
+         : null}
             
             <form onSubmit={handleSubmit}>
                 <label htmlFor="firstName">First Name</label>

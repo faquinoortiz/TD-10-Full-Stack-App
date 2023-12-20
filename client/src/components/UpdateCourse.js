@@ -67,10 +67,11 @@ const UpdateCourse = () => {
         console.log('Course has been updated');
         navigate(`/courses/${id}`);
       } else if (response.status === 403) {
-        throw new Error('/forbidden');
+        throw new Error();
       } else if (response.status === 400) {
-        navigate('/error');
-      } else {
+        const errorData = await response.json ();
+        setErrors(errorData.errors || []);
+      }else{
         throw new Error();
       }
     } catch (error) {
@@ -79,67 +80,66 @@ const UpdateCourse = () => {
     }
   };
 
-  if (isLoaded) {
-    return (
-      <div className="wrap">
-        <h2>Update Course</h2>
-        {errors.length ? (
-          <div className="validation--errors">
-            <h3>Validation Errors</h3>
-            <ul>
-              {errors.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        <form onSubmit={handleSubmit}>
-          <div className="main--flex">
-            <div>
-              <label htmlFor="courseTitle">Course Title</label>
-              <input
-                id="courseTitle"
-                name="courseTitle"
-                type="text"
-                ref={title}
-                defaultValue={course.title ? course.title : ''}
-              />
-
-              <p>By {authUser.firstName} {authUser.lastName}</p>
-
-              <label htmlFor="courseDescription">Course Description</label>
-              <textarea
-                id="courseDescription"
-                name="courseDescription"
-                ref={description}
-                defaultValue={course.description ? course.description : ''}
-              />
-            </div>
-            <div>
-              <label htmlFor="estimatedTime">Estimated Time</label>
-              <input
-                id="estimatedTime"
-                name="estimatedTime"
-                type="text"
-                ref={estimatedTime}
-                defaultValue={course.estimatedTime ? course.estimatedTime : ''}
-              />
-
-              <label htmlFor="materialsNeeded">Materials Needed</label>
-              <textarea
-                id="materialsNeeded"
-                name="materialsNeeded"
-                ref={materialsNeeded}
-                defaultValue={course.materialsNeeded ? course.materialsNeeded : ''}
-              />
-            </div>
-          </div>
-          <button className="button" type="submit">Update Course </button>
-          <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
-                </form>
-            </div>
-        );
+if (isLoaded) {
+    return (
+      <div className="wrap">
+        <h2>Update Course</h2>
+        {errors.length ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        <form onSubmit={handleSubmit}>
+          <div className="main--flex">
+            <div>
+              <label htmlFor="courseTitle">Course Title</label>
+              <input
+                id="courseTitle"
+                name="courseTitle"
+                type="text"
+                ref={title}
+                defaultValue={course.title ? course.title : ''}
+              />
+  
+              <p>By {authUser.firstName} {authUser.lastName}</p>
+  
+              <label htmlFor="courseDescription">Course Description</label>
+              <textarea
+                id="courseDescription"
+                name="courseDescription"
+                ref={description}
+                defaultValue={course.description ? course.description : ''}
+              />
+            </div>
+            <div>
+              <label htmlFor="estimatedTime">Estimated Time</label>
+              <input
+                id="estimatedTime"
+                name="estimatedTime"
+                type="text"
+                ref={estimatedTime}
+                defaultValue={course.estimatedTime ? course.estimatedTime : ''}
+              />
+  
+              <label htmlFor="materialsNeeded">Materials Needed</label>
+              <textarea
+                id="materialsNeeded"
+                name="materialsNeeded"
+                ref={materialsNeeded}
+                defaultValue={course.materialsNeeded ? course.materialsNeeded : ''}
+              />
+            </div>
+          </div>
+          <button className="button" type="submit">Update Course</button>
+          <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
+        </form>
+      </div>
+    );
+  }
 }
-}
-
 export default UpdateCourse;
