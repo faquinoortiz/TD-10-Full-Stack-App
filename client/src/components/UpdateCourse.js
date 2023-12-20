@@ -57,18 +57,12 @@ const UpdateCourse = () => {
       description: description.current.value,
       estimatedTime: estimatedTime.current.value,
       materialsNeeded: materialsNeeded.current.value,
-      userId: authUser.id, // Use authUser.id as the userId
+      userId: authUser.id,
     };
 
-    try {
-      const response = await api(`/courses/${id}`, "PUT",{
-      
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
+   try {
+    const response = await api(`/courses/${id}`, "PUT", body, authUser);
+   
       if (response.status === 204) {
         console.log('Course has been updated');
         navigate(`/courses/${id}`);
@@ -140,9 +134,7 @@ const UpdateCourse = () => {
               />
             </div>
           </div>
-          <button className="button" type="submit">
-            Update Course
-          </button>
+          <button className="button" type="submit">Update Course </button>
           <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
                 </form>
             </div>
