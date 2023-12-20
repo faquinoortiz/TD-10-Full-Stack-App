@@ -19,7 +19,7 @@ export const UserProvider = (props) => {
         user.password = credentials.password;
 
         setAuthUser(user);
-
+//Utilizes cookies to authenticate the user
         Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 1 });
         console.log(`${user.emailAddress} is now successfully signed in`);
         return user;

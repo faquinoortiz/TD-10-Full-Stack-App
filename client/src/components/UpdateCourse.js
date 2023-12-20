@@ -11,7 +11,7 @@ const UpdateCourse = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { authUser } = useContext(UserContext);
-//Ref of fields that are to be utilized in 
+//Ref of fields that are to be utilized in the process of updating a course 
   const title = useRef(null);
   const description = useRef(null);
   const estimatedTime = useRef(null);

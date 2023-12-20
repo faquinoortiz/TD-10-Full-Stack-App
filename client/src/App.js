@@ -1,4 +1,4 @@
-//imports
+//imports fro styles and routes
 import { Route, Routes } from 'react-router-dom';
 import "./styles/reset.css"
 import './styles/global.css' ;
@@ -13,7 +13,7 @@ import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
 import Header from './components/Header'; 
 import PrivateRoute from './components/PrivateRoute';
-
+//Sets up the routes for the application
 const App = () => {
   return (
     <div>

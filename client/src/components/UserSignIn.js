@@ -19,7 +19,7 @@ const {actions} = useContext(UserContext);
     if (location.state) {
       from = location.state.from;
     }
-
+//Sign in to include accurate email and password in order to have a successful login otherwise it will give user an error 
     const credentials = {
       emailAddress: emailAddress.current.value,
       password: password.current.value,
@@ -36,7 +36,7 @@ const {actions} = useContext(UserContext);
       console.log(`Error: ${e}`);
     }
   };
-
+  //navigates back to course list
   const handleCancel = (e) => {
     e.preventDefault();
     navigate("/");
