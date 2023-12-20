@@ -45,6 +45,7 @@ const CreateCourse = () => {
         navigate('/');
     };
 
+    console.log(authUser)
         
         return (
               <div className="wrap">
